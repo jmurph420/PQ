@@ -6,7 +6,7 @@ in
     #"Changed Type"
 
 // 1_CodeImportURL
-"https://k2share.sharepoint.com/sites/k2federal/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+"https://YourTenant.sharepoint.com/sites/YourSite/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
 
 // 1a_CodeImportPath
 "Power BI Resources/CodeBank/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
