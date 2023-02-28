@@ -1,2 +1,2 @@
 // 1_SharePointURL
-"https://k2share.sharepoint.com/sites/k2federal" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+"https://YourTenant.sharepoint.com/sites/Yoursite" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
