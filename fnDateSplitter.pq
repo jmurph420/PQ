@@ -4,18 +4,15 @@
 // Outputs: Expanded Table columns consisting of commonly used date/time transformations. 
 
 let func = 
-
 let
-    Source = (optional UseDate as date ) =>
-
+    Source = (optional UseDate as date) =>
 let
-  
   DateInput = if Value.Is(UseDate, type datetime) then UseDate else DateTime.From(UseDate), // if no time value specified, time values will return as 12:00:00 a.m.
 
   FYStartDay ="10/01/", // Update per your Fiscal Year Start Day
   FYEndDay = "9/30/", // Update per your Fiscal Year End Day
-   fnDateSplitter = Table.AddColumn(Table.FromValue(DateInput),".", each
-    
+
+  fnDateSplitter = Table.AddColumn(Table.FromValue(DateInput),".", each    
      [
          CurrentDate = DateTime.LocalNow(),
 		 		 
@@ -51,7 +48,6 @@ let
         DaysInYear = Date.DayOfYear(Date.EndOfYear(DateTime.LocalNow())),
         DaySorter=Text.From(Date.DayOfWeek(DateInput)) & "-" & Date.DayOfWeekName((DateInput)) as text , 
 
-
         startOfWeek = 1 ,
         Start = List.Min({Date.StartOfMonth(UseDate), Date.EndOfMonth(UseDate)}),
         End = List.Max({Date.StartOfMonth(UseDate), Date.EndOfMonth(UseDate)}),
@@ -63,15 +59,12 @@ let
         TotalBizDaysExclHolidays  = (List.Count(DeleteWeekends2) ),
         CurrentBusinessDay = TotalBizDaysExclHolidays - BusinessDaysRemaining ,
 
-
          WeekStart=Date.StartOfWeek(DateInput) as datetime,
          WeekEnd=Date.EndOfWeek(DateInput) as datetime,
          WeekInYear=Date.WeekOfYear(DateInput),
          WeeksRemainingInYear = 52-WeekInYear,
          WeekInMonth=Date.WeekOfMonth(DateInput),
          WeeksRemainingInMonth = Number.RoundUp(DaysInMonth/7) - WeekInMonth,
-
-        
 
          MonthNum=Date.Month(DateInput),
          MonthName = Date.MonthName(DateInput),
@@ -189,21 +182,28 @@ let
              ))),
 		 //////////// End of FYSection
 
-
          IsYTD = if Date.IsInYearToDate(DateInput) = true then "Y" else "N",
          IsQTD = if DateInput <=DateTime.LocalNow() and DateInput <= Date.EndOfQuarter(DateTime.LocalNow()) then "Y" else "N",
          IsMTD = if DateInput >= Date.StartOfMonth(DateInput) and DateInput <= DateTime.LocalNow() then  "Y" else "N",
 
          1DayAgo = Date.AddDays(UseDate,-1),
          1MonthAgo = Date.AddMonths(UseDate,-1),
-         1QuarterAgo = Number.From(Quarter) -1,
-         1YearAgo = Date.AddYears(UseDate,-1)
-
-                 
          
+         1QuarterAgo = 
+                if Number.From(Quarter)-1 = 0  then 4 
+                else if Number.From(Quarter)-1 = 1 then 1
+                else if Number.From(Quarter)-1 = 2  then 2
+                else if Number.From(Quarter)-1 = 3  then 3
+                else 0,
+
+
+
+
+
+
+         1YearAgo = Date.AddYears(UseDate,-1)
      ]),
 
-    
    Expander = Table.ExpandRecordColumn(fnDateSplitter, ".", (
 
 {"CurrentDate",	"TimeField",	"TimeHour",	"TimeMinute",	"TimeAMPM",	"DayOfMonth",	"OrdinalSuffix","DayOfWeekNum",	"DayName",	"NextWorkDay", "DayAbbr",	"DaysInMonth","DaysRemainingInMonth",	"DayOfYear",	"DaysRemainingInYear",	"DaysInYear",	"DaySorter",	
